@@ -1,0 +1,17 @@
+--------------------------------------------------------------------------------
+    h       :   help
+    s       :   search k p f d
+    sf      :   search_first k f d
+    d       :   download i
+    r       :   ranklist
+    rl      :   rankinfo i d p 
+    p       :   plist p
+    pl      :   plistinfo i d
+    e       :   exit
+--------------------------------------------------------------------------------
+    |--- d   :   download value Y or N init value is 'N'
+    |--- p   :   page size   init value is '1'
+    |--- k   :   keyword init value is "" 
+    |--- f   :   down load list file, init value "list"
+    |--- i   :   index of the list, init value is [], null means select all
+--------------------------------------------------------------------------------
