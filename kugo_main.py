@@ -27,7 +27,16 @@ def printdownlist(params={}):
     printlistinfo(g_downlist)
 
 
+def foreach_ids(ids, list, fun):
+    for id in ids:
+        index = int(id)
+        if index < 1 or index > len(list):
+            continue
+        fun(list[index - 1])
+
+
 def _search(keyword, page=1, dl="N"):
+    #my_println(keyword)
     json_dic1 = json.loads(getpage(URLS["search"].format(keyword, page)))
     global g_music
     for item in json_dic1["data"]["lists"]:
@@ -38,7 +47,7 @@ def _search(keyword, page=1, dl="N"):
 
 
 def _search_first(keyword, dl="N"):
-    print keyword
+    #my_println(keyword)
     json_dic1 = json.loads(getpage(URLS["search"].format(keyword, "1")))
     if len(json_dic1["data"]["lists"]) > 0:
         global g_music
@@ -67,12 +76,8 @@ def search(params):
             for e in g_downlist:
                 _search(e["name"], params["p"], params["d"])
         else:
-            for id in ids:
-                index = int(id)
-                if index < 1 or index > len(g_downlist):
-                    continue
-                _search(g_downlist[index - 1]['name'],
-                        params["p"], params["d"])
+            foreach_ids(ids, g_downlist, lambda e: _search(
+                e['name'], params["p"], params["d"]))
     printlistinfo(g_music)
 
 
@@ -94,12 +99,8 @@ def search_first(params):
             for e in g_downlist:
                 _search_first(e["name"], params["d"])
         else:
-            for id in ids:
-                index = int(id)
-                if index < 1 or index > len(g_downlist):
-                    my_println("search_first", index)
-                    continue
-                _search_first(g_downlist[index - 1]['name'], params["d"])
+            foreach_ids(ids, g_downlist, lambda e: _search_first(
+                e['name'], params["d"]))
     printlistinfo(g_music)
 
 
@@ -121,11 +122,7 @@ def download(params):
         for e in g_music:
             _download(e["code"])
     else:
-        for id in ids:
-            index = int(id)
-            if index < 1 or index > len(g_music):
-                continue
-            _download(g_music[index - 1]["code"])
+        foreach_ids(ids, g_music, lambda e: _download(e["code"]))
 
 
 def ranklist(params={}):
@@ -133,8 +130,8 @@ def ranklist(params={}):
     global g_ranks
     g_ranks = []
     for rank in json_dic1["rank"]["list"]:
-        g_ranks.append(json_format(rank["rankname"],
-                                   rank["rankid"], rank["intro"]))
+        g_ranks.append(json_format(
+            rank["rankname"],  rank["rankid"], rank["intro"]))
     printlistinfo(g_ranks)
 
 
@@ -156,7 +153,7 @@ def _rankinfo(rankid, page=1, dl="N"):
 
 
 def rankinfo(params):
-    my_println("tranklistinfo", params)
+    #my_println("tranklistinfo", params)
     global g_ranks
     global g_music
     g_music = []
@@ -165,12 +162,8 @@ def rankinfo(params):
         for e in g_ranks:
             _rankinfo(e["code"], params["p"], params["d"])
     else:
-        for id in ids:
-            index = int(id)
-            if index < 1 or index > len(g_ranks):
-                continue
-            rankid = g_ranks[index - 1]["code"]
-            _rankinfo(rankid, params["p"], params["d"])
+        foreach_ids(ids, g_ranks, lambda e: _rankinfo(
+            e["code"], params["p"], params["d"]))
     printlistinfo(g_music)
 
 
@@ -210,13 +203,8 @@ def plistinfo(params={}):
         for special in g_specials:
             _plistinfo(special["code"], params["d"])
     else:
-        for id in ids:
-            index = int(id)
-            if index < 1 or index > len(g_specials):
-                my_println(index, "plistinfo error")
-                continue
-            specialid = g_specials[index - 1]["code"]
-            _plistinfo(specialid, params["d"])
+        foreach_ids(ids, g_specials, lambda e: _plistinfo(
+            e["code"], params["d"]))
     printlistinfo(g_music)
 
 
