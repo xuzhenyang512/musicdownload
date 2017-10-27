@@ -38,6 +38,7 @@ def _search(keyword, page=1, dl="N"):
 
 
 def _search_first(keyword, dl="N"):
+    print keyword
     json_dic1 = json.loads(getpage(URLS["search"].format(keyword, "1")))
     if len(json_dic1["data"]["lists"]) > 0:
         global g_music
@@ -96,6 +97,7 @@ def search_first(params):
             for id in ids:
                 index = int(id)
                 if index < 1 or index > len(g_downlist):
+                    my_println("search_first", index)
                     continue
                 _search_first(g_downlist[index - 1]['name'], params["d"])
     printlistinfo(g_music)
@@ -106,7 +108,8 @@ def _download(hash):
     file_name = json_dic1["data"]["song_name"] + ".mp3"
     dest_dir = os.path.join(g_downloadpath, file_name)
     url = json_dic1["data"]["play_url"]
-    print "download:", json_dic1["data"]["song_name"], json_dic1["data"]["audio_name"], json_dic1["data"]["author_name"]
+    my_println("download:", json_dic1["data"]["song_name"],
+               json_dic1["data"]["audio_name"], json_dic1["data"]["author_name"])
     downLoadFromURL(dest_dir, url)
 
 
@@ -153,7 +156,7 @@ def _rankinfo(rankid, page=1, dl="N"):
 
 
 def rankinfo(params):
-    print "tranklistinfo", params
+    my_println("tranklistinfo", params)
     global g_ranks
     global g_music
     g_music = []
@@ -210,7 +213,7 @@ def plistinfo(params={}):
         for id in ids:
             index = int(id)
             if index < 1 or index > len(g_specials):
-                print index , "plistinfo error"
+                my_println(index, "plistinfo error")
                 continue
             specialid = g_specials[index - 1]["code"]
             _plistinfo(specialid, params["d"])
@@ -223,6 +226,4 @@ def exit(params={}):
 
 def help(params={}):
     for h in g_helps:
-        print h.replace("\n", '').replace("\r", "")
-
-
+        my_println(h.replace("\n", '').replace("\r", ""))

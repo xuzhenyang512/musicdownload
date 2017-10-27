@@ -7,13 +7,15 @@ import Tkinter
 import requests
 from __init__ import *
 
+
 def downLoadFromURL(dest_dir, url):
     try:
         urllib.urlretrieve(url, dest_dir)
         return OK
     except:
-        print '\tError retrieving the URL:', url
+        my_println('\tError retrieving the URL:', url)
         return ERROR
+
 
 def readfile(filename):
     readlines = []
@@ -23,8 +25,10 @@ def readfile(filename):
         file.close()
     downloadlist = []
     for line in readlines:
-        downloadlist.append(json_format(line.replace('\n', '').replace('\r', '')))
+        downloadlist.append(json_format(
+            line.replace('\n', '').replace('\r', '')))
     return downloadlist
+
 
 def line():
     str = ""
@@ -32,17 +36,34 @@ def line():
         str += "-"
     return str
 
+
 def array_print(array, callback):
     index = 1
-    print line()
+    my_println(line())
     for e in array:
         callback(index, e)
-        print line()
+        my_println(line())
         index += 1
+
+
+def my_print(*argv):
+    str = ""
+    for a in argv:
+        print a
+
+
+def my_println(*argv):
+    str = ""
+    for a in argv:
+        print a.encode(g_encode),
+    print ""
+
 
 def kg_print(s1, s2, s3):
     global g_encode
-    print "{}| {} {}".format("{0: ^6}".format(s1), "{0: <16}".format(s2), s3.replace('\n', '').replace('\r', '')[0:50]).encode(g_encode)
+    my_println("{}| {} {}".format("{0: ^6}".format(s1), "{0: <16}".format(
+        s2), s3.replace('\n', '').replace('\r', '')[0:50]))
+
 
 def json_format(name, code="", other=""):
     obj = {}
@@ -51,11 +72,14 @@ def json_format(name, code="", other=""):
     obj["other"] = other
     return obj
 
+
 def json_print(index, obj):
     kg_print(index, obj["name"], obj["other"])
 
+
 def printlistinfo(list):
     array_print(list, json_print)
+
 
 def getpage(url):
     for i in range(5):
@@ -63,7 +87,7 @@ def getpage(url):
         if r.status_code == 200:
             return r.content
         else:
-            print "requests error :", r.status_code, url
+            my_println("requests error :", r.status_code, url)
     return ""
-        
-    #return urllib2.urlopen(url).read();
+
+    # return urllib2.urlopen(url).read();
